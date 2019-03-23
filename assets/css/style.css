@@ -4,7 +4,7 @@ body {
     font-family: Courier New, Courier, monospace;
     color: white;
     text-shadow: 0 0 2px black, -1px -1px 2px black, 1px 0 2px black, 1px 1px 2px black;
-    background: url('../images/bgimage.jpg') no-repeat;
+    background: url('../images/istockphoto-657233766-612x612.jpg') no-repeat;
     background-size: cover;
 }
 .container { 
@@ -16,7 +16,7 @@ h4,h5,h6 {
     padding: 5px;
     background-color: rgba(101,155,242,.2);
 }
-#title-image, #youlose-image, #youwin-image{ 
+#title-image, #gameover-image, #youwin-image{ 
     display: block;
     margin: 0 auto;
 }
@@ -26,11 +26,11 @@ h4,h5,h6 {
 }
 
 #pressKeyTryAgain, 
-#youlose-image, 
+#gameover-image, 
 #youwin-image { display: none;}
 .gameplay-column {
     padding-top: 20px;
-    border: 3px dashed #fff;
+    border: 3px bold #fff;
     text-align: center;
     margin-top: 20px;
     min-height: 500px;

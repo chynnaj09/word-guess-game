@@ -1,52 +1,48 @@
 // Word list
 
-var chosenWords = ["dog" , "cat" , "fish" , "bird" , "snake"];
+var selectableWords = 
+    [
+        "DOG",
+        "CAT",
+        "FISH",
+        "ELEPHANT",
+        "FERRET",
+        "RHINO",
+        "ZEBRA",
+        "LION",
+    ];    
+const maxTries = 10;            // Maximum number of tries player has
 
-//For press key to play again
-var gameFinished = False;
+var guessedLetters = [];        // Stores the letters the user guessed
+var currentWordIndex;           // Index of the current word in the array
+var guessingWord = [];          // This will be the word we actually build to match the current word
+var remainingGuesses = 0;       // How many tries the player has left
+var hasFinished = false;        // Flag for 'press any key to try again'     
+var wins = 0;                   // How many wins has the player racked up
 
-//Keeps the leeters the user has guessed
-var guessedLetters = [];
-
-//This is the word to match the current word
-var wordToGuess = [];
-
-//How many tries the guesser has left
-var remainingGuesses = 0;
-
-//Current word in the array will be an index
-var currentWordIndex;
-
-//How many wins
-var wins = 0;
-
-//Highest number guesser has
-const maxTries = 10;
-
-// Game sounds
-var keySound = new Audio('./assets/sounds/typewriter-key.wav');
-var winSound = new Audio('./assets/sounds/you-win.wav');
-var loseSound = new Audio('./assets/sounds/you-lose.wav');
-
-
+var keySound = new Audio('./assets/sounds/index.mp3');
+var winSound = new Audio('./assets/sounds/zapsplat_multimedia_male_voice_processed_says_you_win_001_21572.mp3');
+var loseSound = new Audio('./assets/sounds/zapsplat_multimedia_male_voice_processed_says_you_lose_21571.mp3');
 // Reset our game-level variables
 function resetGame() {
     remainingGuesses = maxTries;
 
     // Use Math.floor to round the random number down to the nearest whole.
-    currentWordIndex = Math.floor(Math.random() * (chosenWords.length));
+    currentWordIndex = Math.floor(Math.random() * (selectableWords.length));
 
     // Clear out arrays
     guessedLetters = [];
-    wordToGuess = [];
+    guessingWord = [];
+
 
     // Build the guessing word and clear it out
-    for (var i = 0; i < chosenWords[currentWordIndex].length; i++) {
-       wordToGuess.push("_");
+    for (var i = 0; i < selectableWords[currentWordIndex].length; i++) {
+        guessingWord.push("_");
     }
+
     // Hide game over and win images/text
-    document.getElementById("pressKeyToPlayAgain").style.cssText = "display: none";
-    document.getElementById("youlose-image").style.cssText = "display: none";
+    document.getElementById("pressKeyTryAgain").style.cssText = "display: none";
+    document.getElementById("gameover-image").style.cssText = "display: none";
     document.getElementById("youwin-image").style.cssText = "display: none";
 
     // Show display
@@ -55,23 +51,33 @@ function resetGame() {
 
 //  Updates the display on the HTML Page
 function updateDisplay() {
+
     document.getElementById("totalWins").innerText = wins;
-// Printing the array would add commas (,) - so we concatenate a string from each value in the array.
-    var wordToGuess = "";
-    for (var i = 0; i <wordToGuess.length; i++) {
-       wordToGuessText += wordToGuess[i];
-}
-    document.getElementById("currentWord").innerText = wordToGuessText;
+
+    // Display how much of the word we've already guessed on screen.
+    // Printing the array would add commas (,) - so we concatenate a string from each value in the array.
+    var guessingWordText = "";
+    for (var i = 0; i < guessingWord.length; i++) {
+        guessingWordText += guessingWord[i];
+    }
+
+    //
+    document.getElementById("currentWord").innerText = guessingWordText;
     document.getElementById("remainingGuesses").innerText = remainingGuesses;
     document.getElementById("guessedLetters").innerText = guessedLetters;
 };
+
+
+
+// This function takes a letter and finds all instances of 
+// appearance in the string and replaces them in the guess word.
 function evaluateGuess(letter) {
     // Array to store positions of letters in string
     var positions = [];
 
     // Loop through word finding all instances of guessed letter, store the indicies in an array.
-    for (var i = 0; i < chosenWords[currentWordIndex].length; i++) {
-        if (choseWords[currentWordIndex][i] === letter) {
+    for (var i = 0; i < selectableWords[currentWordIndex].length; i++) {
+        if (selectableWords[currentWordIndex][i] === letter) {
             positions.push(i);
         }
     }
@@ -83,18 +89,18 @@ function evaluateGuess(letter) {
     } else {
         // Loop through all the indicies and replace the '_' with a letter.
         for (var i = 0; i < positions.length; i++) {
-            wordToGuess[positions[i]] = letter;
+            guessingWord[positions[i]] = letter;
         }
     }
 };
 // Checks for a win by seeing if there are any remaining underscores in the guessingword we are building.
 function checkWin() {
-    if (wordToGuess.indexOf("_") === -1) {
+    if (guessingWord.indexOf("_") === -1) {
         document.getElementById("youwin-image").style.cssText = "display: block";
         document.getElementById("pressKeyTryAgain").style.cssText = "display: block";
         wins++;
         winSound.play();
-        gameFinished = true;
+        hasFinished = true;
     }
 };
 
@@ -103,9 +109,9 @@ function checkWin() {
 function checkLoss() {
     if (remainingGuesses <= 0) {
         loseSound.play();
-        document.getElementById("youlose-image").style.cssText = "display: block";
-        document.getElementById("pressKeyToPlayAgain").style.cssText = "display:block";
-        gameFinished = true;
+        document.getElementById("gameover-image").style.cssText = "display: block";
+        document.getElementById("pressKeyTryAgain").style.cssText = "display:block";
+        hasFinished = true;
     }
 }
 
@@ -125,9 +131,9 @@ function makeGuess(letter) {
 // Event listener
 document.onkeydown = function (event) {
     // If we finished a game, dump one keystroke and reset.
-    if (gameFinished) {
+    if (hasFinished) {
         resetGame();
-        gameFinished = false;
+        hasFinished = false;
     } else {
         // Check to make sure a-z was pressed.
         if (event.keyCode >= 65 && event.keyCode <= 90) {
@@ -139,4 +145,3 @@ document.onkeydown = function (event) {
         }
     }
 };
-
