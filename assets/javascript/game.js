@@ -20,7 +20,7 @@ var remainingGuesses = 0;       // How many tries the player has left
 var hasFinished = false;        // Flag for 'press any key to try again'     
 var wins = 0;                   // How many wins has the player racked up
 
-var keySound = new Audio('./assets/sounds/index.mp3');
+var keySound = new Audio('./assets/sounds/zapsplat_fantasy_fairy_fly_past_wings_flap_fast_002_21525.mp3');
 var winSound = new Audio('./assets/sounds/zapsplat_multimedia_male_voice_processed_says_you_win_001_21572.mp3');
 var loseSound = new Audio('./assets/sounds/zapsplat_multimedia_male_voice_processed_says_you_lose_21571.mp3');
 // Reset our game-level variables
