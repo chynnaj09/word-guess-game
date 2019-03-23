@@ -2,9 +2,6 @@
 
 var chosenWords = ["dog" , "cat" , "fish" , "bird" , "snake"];
 
-//Start the game
-var gameStarted = False;
-
 //For press key to play again
 var gameFinished = False;
 
@@ -35,17 +32,16 @@ var loseSound = new Audio('./assets/sounds/you-lose.wav');
 // Reset our game-level variables
 function resetGame() {
     remainingGuesses = maxTries;
-    gameStarted = false;
 
     // Use Math.floor to round the random number down to the nearest whole.
-    currentIndex = Math.floor(Math.random() * (chosenWords.length));
+    currentWordIndex = Math.floor(Math.random() * (chosenWords.length));
 
     // Clear out arrays
     guessedLetters = [];
     wordToGuess = [];
 
     // Build the guessing word and clear it out
-    for (var i = 0; i < chosenWords[currentIndex].length; i++) {
+    for (var i = 0; i < chosenWords[currentWordIndex].length; i++) {
        wordToGuess.push("_");
     }
     // Hide game over and win images/text
@@ -83,7 +79,7 @@ function evaluateGuess(letter) {
     // if there are no indicies, remove a guess and update the hangman image
     if (positions.length <= 0) {
         remainingGuesses--;
-        updateHangmanImage();
+
     } else {
         // Loop through all the indicies and replace the '_' with a letter.
         for (var i = 0; i < positions.length; i++) {
@@ -93,7 +89,7 @@ function evaluateGuess(letter) {
 };
 // Checks for a win by seeing if there are any remaining underscores in the guessingword we are building.
 function checkWin() {
-    if (guessingWord.indexOf("_") === -1) {
+    if (wordToGuess.indexOf("_") === -1) {
         document.getElementById("youwin-image").style.cssText = "display: block";
         document.getElementById("pressKeyTryAgain").style.cssText = "display: block";
         wins++;
@@ -109,7 +105,7 @@ function checkLoss() {
         loseSound.play();
         document.getElementById("youlose-image").style.cssText = "display: block";
         document.getElementById("pressKeyToPlayAgain").style.cssText = "display:block";
-        hasFinished = true;
+        gameFinished = true;
     }
 }
 
